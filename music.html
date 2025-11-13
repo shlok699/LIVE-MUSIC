@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎶 𝗟𝗜𝗩𝗘 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝗠𝗨𝗦𝗜𝗖 🎶</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0b0b0b, #000);
+    color: #fff;
+    text-align: center;
+    overflow-x: hidden;
+  }
+  header {
+    padding: 20px;
+    background: linear-gradient(90deg, #ff00ff, #00ffff);
+    box-shadow: 0 0 25px #ff00ff55;
+  }
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  /* Bottom scrolling marquee */
+  .marquee {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    font-size: 16px;
+    color: #ff00ff;
+    letter-spacing: 2px;
+    font-weight: 600;
+    animation: scrollText 15s linear infinite;
+  }
+
+  @keyframes scrollText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* Channels 2x2 layout */
+  .channels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 30px 10px;
+  }
+
+  .channel {
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 25px #ff00ff44;
+    background: #111;
+    flex: 0 0 calc(50% - 25px); /* 2 per row */
+    max-width: 200px;
+  }
+  .channel:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 40px #00ffffaa;
+  }
+  .channel img {
+    width: 180px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  /* Player section */
+  #player-section {
+    display: none;
+  }
+  video, audio {
+    width: 90%;
+    margin: 20px auto;
+    display: none;
+    border-radius: 15px;
+    box-shadow: 0 0 25px #ff00ff88;
+  }
+  .controls {
+    margin-top: 15px;
+  }
+  button {
+    background: linear-gradient(45deg, #ff007f, #7f00ff);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 5px;
+    transition: 0.3s;
+    box-shadow: 0 0 15px #ff00ffaa;
+  }
+  button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px #00ffffaa;
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎶 𝗟𝗜𝗩𝗘 𝗖𝗛𝗔𝗡𝗡𝗘𝗟 𝗠𝗨𝗦𝗜𝗖 🎶</h1>
+</header>
+
+<!-- Main interface -->
+<div id="mainUI" class="channels">
+  <div class="channel" onclick="playChannel('9XM')">
+    <img src="https://i.ibb.co/J4WbXmk/file-2183.jpg" alt="9XM">
+  </div>
+  <div class="channel" onclick="playChannel('9XJalwa')">
+    <img src="https://i.ibb.co/YBJ2VSNf/file-2185.jpg" alt="9X Jalwa">
+  </div>
+  <div class="channel" onclick="playChannel('B4U')">
+    <img src="https://i.ibb.co/tTb6g3VP/file-2182.jpg" alt="B4U Music">
+  </div>
+  <div class="channel" onclick="playChannel('Showbox')">
+    <img src="https://i.ibb.co/Q7QvyT2B/file-2181.jpg" alt="Showbox">
+  </div>
+<div class="channel" onclick="playChannel('SteelbirdMusic')">
+    <img src="https://i.imgur.com/Egijzx3.png" alt="SteelbirdMusic">
+</div>
+
+
+<div id="player-section">
+  <video id="videoPlayer" controls autoplay></video>
+  <audio id="audioPlayer" controls autoplay></audio>
+  <div class="controls">
+    <button onclick="toggleMode('video')">🎥 Vɪᴅᴇᴏ Mᴏᴅᴇ</button>
+    <button onclick="toggleMode('audio')">🎧 Aᴜᴅɪᴏ Mᴏᴅᴇ</button>
+  </div>
+
+  <div style="margin-top:15px;">
+    <button onclick="goBack()">🔙 BACK</button>
+  </div>
+</div>
+
+<script>
+  const channels = {
+    "9XM": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/9xm/23886666-8fc5-470f-aab1-bd637ed607b1/3.m3u8",
+    "9XJalwa": "https://d35j504z0x2vu2.cloudfront.net/v1/manifest/0bc8e8376bd8417a1b6761138aa41c26c7309312/9x-jalwa/a276a4fb-2114-4b48-845e-220e6f2c9583/0.m3u8",
+    "B4U": "https://cdnb4u.wiseplayout.com/B4U_Music/SD216/SD216.m3u8",
+    "Showbox": "https://epiconvh.akamaized.net/live/showbox/master_480.m3u8"
+    "SteelbirdMusic": "https://cdn2.in/SteelbirdMusicTVhls/live.m3u8"
+  };
+
+  let currentChannel = null;
+  let mode = "video";
+
+  function playChannel(name) {
+    const mainUI = document.getElementById('mainUI');
+    const playerUI = document.getElementById('player-section');
+
+    currentChannel = channels[name];
+    if (!currentChannel) return alert("Channel link not found!");
+
+    // Hide main, show player
+    mainUI.style.display = 'none';
+    playerUI.style.display = 'block';
+
+    const video = document.getElementById('videoPlayer');
+    const audio = document.getElementById('audioPlayer');
+
+    if (mode === "video") {
+      audio.pause(); audio.currentTime=0; audio.style.display='none';
+      video.style.display = 'block'; video.src = currentChannel; video.play();
+    } else {
+      video.pause(); video.currentTime=0; video.style.display='none';
+      audio.style.display = 'block'; audio.src = currentChannel; audio.play();
+    }
+  }
+
+  function toggleMode(m) {
+    mode = m;
+    if (currentChannel) {
+      playChannel(Object.keys(channels).find(k => channels[k] === currentChannel));
+    }
+  }
+
+  function goBack() {
+    const mainUI = document.getElementById('mainUI');
+    const playerUI = document.getElementById('player-section');
+
+    const video = document.getElementById('videoPlayer');
+    const audio = document.getElementById('audioPlayer');
+
+    // Stop both players
+    video.pause(); video.currentTime=0; video.style.display='none';
+    audio.pause(); audio.currentTime=0; audio.style.display='none';
+
+    // Show main interface
+    mainUI.style.display = 'flex';
+    playerUI.style.display = 'none';
+  }
+</script>
+
+<div class="marquee">
+  <span>©️ Pᴏᴡᴇʀᴇʀᴅ Bʏ 尺ㄖ山ᗪㄚ</span>
+</div>
+</body>
+</html>
